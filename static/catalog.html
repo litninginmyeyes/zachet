@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Готовые сборки - Core Acolytes</title>
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="catalog.css">
+    <script src="main.js"></script>
+    <script src="catalog.js"></script>
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">
+            <a href="index.html"><img src="img/logo.png" alt="Core Acolytes"></a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="catalog.html">Готовые сборки</a></li>
+                <li><a href="configurator.html">Конструктор</a></li>
+                <li><a href="cart.html">Корзина</a></li>
+                <li><a href="contact.html">О нас</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="catalog-main">
+        <div class="catalog-container">
+            <aside class="catalog-filters">
+                <h2>Категории</h2>
+                <nav class="filter-buttons">
+                    <button class="filter-btn active" data-category="all">Все сборки</button>
+                    <button class="filter-btn" data-category="standard">Standard</button>
+                    <button class="filter-btn" data-category="pro">Pro</button>
+                    <button class="filter-btn" data-category="ultimate">Ultimate</button>
+                </nav>
+            </aside>
+
+            <section class="catalog-content">
+                <h1 class="catalog-title">Готовые сборки ПК</h1>
+                <p class="catalog-subtitle">Премиальные системы от инженеров Core Acolytes</p>
+                
+                <div class="builds-grid">
+                    <div class="build-card" data-category="standard">
+                        <img src="img/standart.png">
+                        <h3>Gaming Standard</h3>
+                        <ul class="build-specs">
+                            <li>Intel Core i5-13400F</li>
+                            <li>NVIDIA RTX 4060</li>
+                            <li>16GB DDR4 RAM</li>
+                            <li>1TB NVMe SSD</li>
+                        </ul>
+                        <p class="build-price">85 000₽</p>
+                        <button class="add-to-cart">В корзину</button>
+                    </div>
+                    
+                    <div class="build-card" data-category="pro">
+                        <img src="img/pro.png">
+                        <h3>Gaming Pro</h3>
+                        <ul class="build-specs">
+                            <li>Intel Core i7-14700K</li>
+                            <li>NVIDIA RTX 4070</li>
+                            <li>32GB DDR5 RAM</li>
+                            <li>2TB NVMe SSD</li>
+                        </ul>
+                        <p class="build-price">125 000₽</p>
+                        <button class="add-to-cart">В корзину</button>
+                    </div>
+                    
+                    <div class="build-card" data-category="ultimate">
+                        <img src="img/ultimate.png">
+                        <h3>Gaming Ultimate</h3>
+                        <ul class="build-specs">
+                            <li>Intel Core i9-14900K</li>
+                            <li>NVIDIA RTX 4090</li>
+                            <li>64GB DDR5 RAM</li>
+                            <li>4TB NVMe SSD + 2TB HDD</li>
+                        </ul>
+                        <p class="build-price">200 000₽</p>
+                        <button class="add-to-cart">В корзину</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

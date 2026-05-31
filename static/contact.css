@@ -1,0 +1,128 @@
+
+.contact-main {
+    max-width: 1200px;
+    margin: 4rem;
+    padding: 10rem;
+}
+
+.contact-main h3 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #ffffff;
+    margin-bottom: 3rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+}
+
+
+.contact-section,
+.support-section {
+    background: rgba(30, 30, 30, 0.7);
+    border-radius: 12px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.contact-section:hover,
+.support-section:hover {
+    border-color: rgba(0, 212, 255, 0.5);
+    box-shadow: 0 0 25px rgba(0, 212, 255, 0.1);
+    transform: translateY(-5px);
+}
+
+
+.contact-section h4,
+.support-section h4 {
+    color: #00d4ff;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+
+.contact-section p,
+.support-section p {
+    color: #bbbbbb;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.contact-section img,
+.support-section img {
+    width: 200px;
+    height: 150px;
+    object-fit: contain;
+    margin: 1.5rem auto;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    display: block;
+    background: rgba(0, 212, 255, 0.05);
+}
+
+
+.contact-section a,
+.support-section a {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: transparent;
+    border: 2px solid #00d4ff;
+    border-radius: 8px;
+    color: #00d4ff;
+    font-size: 1rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.contact-section a:hover,
+.support-section a:hover {
+    background: rgba(0, 212, 255, 0.1);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+    transform: scale(1.05);
+}
+
+
+@media (min-width: 768px) {
+    .contact-main {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        align-items: start;
+    }
+    
+    .contact-main h3 {
+        grid-column: 1 / -1;
+    }
+    
+    .contact-section,
+    .support-section {
+        margin-bottom: 0;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+}
+
+
+@media (min-width: 1200px) {
+    .contact-main {
+        padding: 4rem 2rem;
+    }
+    
+    .contact-section,
+    .support-section {
+        padding: 3rem;
+    }
+}

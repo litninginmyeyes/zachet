@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Конструктор ПК - Core Acolytes</title>
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="configurator.css">
+    <script src="main.js"></script>
+    <script src="configurator.js"></script>
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">
+            <a href="index.html"><img src="img/logo.png" alt="Core Acolytes"></a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="catalog.html">Готовые сборки</a></li>
+                <li><a href="configurator.html">Конструктор</a></li>
+                <li><a href="cart.html">Корзина</a></li>
+                <li><a href="contact.html">О нас</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="configurator-main">
+        <div class="configurator-container">
+            <aside class="categories-sidebar">
+                <h2>Комплектующие</h2>
+                <nav class="category-buttons">
+                    <button class="category-btn active" data-category="cpu">
+                        <span>Процессор</span>
+                    </button>
+                    <button class="category-btn" data-category="gpu">
+                        <span>Видеокарта</span>
+                    </button>
+                    <button class="category-btn" data-category="ram">
+                        <span>Оперативная память</span>
+                    </button>
+                    <button class="category-btn" data-category="mb">
+                        <span>Материнская плата</span>
+                    </button>
+                    <button class="category-btn" data-category="disk">
+                        <span>Накопители</span>
+                    </button>
+                    <button class="category-btn" data-category="cooler">
+                        <span>Охлаждение</span>
+                    </button>
+                    <button class="category-btn" data-category="power">
+                        <span>Блок питания</span>
+                    </button>
+                    <button class="category-btn" data-category="frame">
+                        <span>Корпус</span>
+                    </button>
+                </nav>
+            </aside>
+
+            <section class="components-section">
+                <div class="components-header">
+                    <h2>Доступные комплектующие</h2>
+                    <p>Выберите компоненты для вашей сборки</p>
+                </div>
+                <div class="components-grid">
+                </div>
+            </section>
+
+            <div class="right-sidebar">
+                <aside class="filters-sidebar">
+                    <div class="filter-group">
+                        <h3>Цена</h3>
+                        <div class="price-filter">
+                            <input type="range" min="0" max="200000" value="200000" class="price-slider">
+                        </div>
+                        <div class="price-values">
+                            <span>до 200 000₽</span>
+                            <span>до 200 000₽</span>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <h3>Производитель</h3>
+                        <div class="brand-filter">
+                            <label><input type="checkbox" name="brand" value="amd" checked> AMD</label>
+                            <label><input type="checkbox" name="brand" value="intel" checked> Intel</label>
+                            <label><input type="checkbox" name="brand" value="nvidia"> NVIDIA</label>
+                            <label><input type="checkbox" name="brand" value="asus"> ASUS</label>
+                        </div>
+                    </div>
+                </aside>
+
+                <aside class="build-sidebar">
+                    <h2>Ваша сборка</h2>
+                    <div class="selected-components">
+                        <div class="component-item"><span>Процессор:</span> <span class="component-value">не выбран</span></div>
+                        <div class="component-item"><span>Видеокарта:</span> <span class="component-value">не выбран</span></div>
+                        <div class="component-item"><span>Оперативная память:</span> <span class="component-value">не выбран</span></div>
+                        <div class="component-item"><span>Материнская плата:</span> <span class="component-value">не выбран</span></div>
+                        <div class="component-item"><span>Накопители:</span> <span class="component-value">не выбран</span></div>
+                        <div class="component-item"><span>Охлаждение:</span> <span class="component-value">не выбран</span></div>
+                        <div class="component-item"><span>Блок питания:</span> <span class="component-value">не выбран</span></div>
+                        <div class="component-item"><span>Корпус:</span> <span class="component-value">не выбран</span></div>
+                    </div>
+                    <div class="total-section">
+                        <div class="total-price">
+                            <span>Итого:</span>
+                            <span class="price-value">0₽</span>
+                        </div>
+                        <button class="save-build-btn">Сохранить сборку</button>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

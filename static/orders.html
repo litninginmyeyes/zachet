@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Мои заказы - Core Acolytes</title>
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js"></script>
+    <style>
+        .orders-main {
+            padding: 105px 2rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .orders-title {
+            font-size: 2rem;
+            color: #ffffff;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .order-card {
+            background: rgba(30, 30, 30, 0.7);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .order-card:hover {
+            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.05);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .order-id {
+            color: #00d4ff;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .order-date {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .order-status {
+            padding: 0.3rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .status-new        { background: rgba(0,212,255,0.15); color: #00d4ff; }
+        .status-processing { background: rgba(255,165,0,0.15);  color: orange; }
+        .status-done       { background: rgba(76,175,80,0.15);  color: #4CAF50; }
+        .status-cancelled  { background: rgba(255,80,80,0.15);  color: #ff5050; }
+
+        .order-items {
+            margin-bottom: 1rem;
+        }
+
+        .order-item-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            color: #ccc;
+            font-size: 0.95rem;
+        }
+
+        .order-item-row:last-child {
+            border-bottom: none;
+        }
+
+        .order-item-qty {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .order-item-price {
+            color: #00d4ff;
+            font-weight: 500;
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 212, 255, 0.2);
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .order-total span:last-child {
+            color: #00d4ff;
+        }
+
+        .empty-orders {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(30,30,30,0.7);
+            border-radius: 12px;
+            border: 2px dashed rgba(0,212,255,0.3);
+        }
+
+        .empty-orders h3 {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-orders p {
+            color: #aaa;
+            margin-bottom: 2rem;
+        }
+
+        .empty-orders a {
+            padding: 0.8rem 2rem;
+            border: 2px solid #00d4ff;
+            border-radius: 8px;
+            color: #00d4ff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .empty-orders a:hover {
+            background: rgba(0,212,255,0.1);
+        }
+
+        .loading {
+            text-align: center;
+            color: #aaa;
+            padding: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">
+            <a href="index.html"><img src="img/logo.png" alt="Core Acolytes"></a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="catalog.html">Готовые сборки</a></li>
+                <li><a href="configurator.html">Конструктор</a></li>
+                <li><a href="cart.html">Корзина</a></li>
+                <li><a href="contact.html">О нас</a></li>
+                <li class="auth-nav-item"><a href="auth.html">Войти</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="orders-main">
+        <h1 class="orders-title">Мои заказы</h1>
+        <div id="orders-container"><p class="loading">Загрузка...</p></div>
+    </main>
+
+    <script>
+        const statusLabels = {
+            new: 'Новый',
+            processing: 'В обработке',
+            done: 'Выполнен',
+            cancelled: 'Отменён'
+        };
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!window.CoreShop.isLoggedIn()) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            try {
+                const orders = await window.CoreShop.apiFetch('/orders');
+                renderOrders(orders);
+            } catch {
+                document.getElementById('orders-container').innerHTML =
+                    '<p style="color:#ff6666;text-align:center">Ошибка загрузки заказов</p>';
+            }
+        });
+
+        function renderOrders(orders) {
+            const container = document.getElementById('orders-container');
+
+            if (orders.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-orders">
+                        <h3>😔 У вас пока нет заказов</h3>
+                        <p>Выберите готовую сборку или соберите свою</p>
+                        <a href="catalog.html">Перейти в каталог</a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = orders.map(order => `
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <span class="order-id">Заказ #${order.id}</span>
+                            <span class="order-date"> · ${new Date(order.created_at).toLocaleDateString('ru-RU')}</span>
+                        </div>
+                        <span class="order-status status-${order.status}">
+                            ${statusLabels[order.status] || order.status}
+                        </span>
+                    </div>
+
+                    <div class="order-items">
+                        ${order.items.map(item => `
+                            <div class="order-item-row">
+                                <span>${item.name} <span class="order-item-qty">×${item.quantity}</span></span>
+                                <span class="order-item-price">${(item.price * item.quantity).toLocaleString('ru-RU')}₽</span>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="order-total">
+                        <span>Итого</span>
+                        <span>${order.total.toLocaleString('ru-RU')}₽</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

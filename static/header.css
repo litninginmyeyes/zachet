@@ -1,0 +1,60 @@
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 2rem;
+    background-color: #0a0a0a;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 60px;
+    width: auto;
+    filter: drop-shadow(0 0 5px #00d4ff);
+    transition: all 0.3s ease;
+}
+
+.logo img:hover {
+    filter: drop-shadow(0 0 10px #00d4ff) brightness(1.1);
+}
+
+.main-header nav {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.main-header nav ul {
+    display: flex;
+    list-style: none;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.main-header nav a {
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 500;
+    padding: 0.5rem 0.9rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.main-header nav a:hover {
+    color: #00d4ff;
+    background-color: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+    filter: drop-shadow(0 0 8px #00d4ff);
+}

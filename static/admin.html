@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Админка - Core Acolytes</title>
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-main {
+            padding: 105px 2rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .admin-title {
+            font-size: 2rem;
+            color: #00d4ff;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .admin-tab {
+            padding: 0.7rem 1.5rem;
+            background: transparent;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            color: #aaa;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .admin-tab.active {
+            border-color: #00d4ff;
+            color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .admin-section { display: none; }
+        .admin-section.active { display: block; }
+
+        /* Таблицы */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+
+        .admin-table th {
+            text-align: left;
+            padding: 0.8rem 1rem;
+            color: #00d4ff;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .admin-table td {
+            padding: 0.8rem 1rem;
+            color: #ccc;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+        }
+
+        .admin-table tr:hover td {
+            background: rgba(0, 212, 255, 0.03);
+        }
+
+        /* Статусы заказов */
+        .status-badge {
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .status-new        { background: rgba(0,212,255,0.15); color: #00d4ff; }
+        .status-processing { background: rgba(255,165,0,0.15);  color: orange; }
+        .status-done       { background: rgba(76,175,80,0.15);  color: #4CAF50; }
+        .status-cancelled  { background: rgba(255,80,80,0.15);  color: #ff5050; }
+
+        .status-select {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(0,212,255,0.3);
+            border-radius: 6px;
+            color: #fff;
+            padding: 0.3rem 0.5rem;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        /* Кнопки */
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid;
+        }
+        .btn-danger  { background: rgba(255,80,80,0.1); border-color: #ff5050; color: #ff5050; }
+        .btn-primary { background: rgba(0,212,255,0.1); border-color: #00d4ff; color: #00d4ff; }
+        .btn-danger:hover  { background: rgba(255,80,80,0.2); }
+        .btn-primary:hover { background: rgba(0,212,255,0.2); }
+
+        /* Форма добавления товара */
+        .product-form {
+            background: rgba(30,30,30,0.7);
+            border: 1px solid rgba(0,212,255,0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .product-form h3 {
+            color: #00d4ff;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .form-field label {
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+
+        .form-field input,
+        .form-field select {
+            padding: 0.6rem 0.8rem;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(0,212,255,0.2);
+            border-radius: 6px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .form-field input:focus,
+        .form-field select:focus {
+            border-color: #00d4ff;
+        }
+
+        .form-field select option {
+            background: #1a1a1a;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            color: #fff;
+            font-size: 1.5rem;
+        }
+
+        .order-items-list {
+            font-size: 0.8rem;
+            color: #888;
+            max-width: 300px;
+        }
+
+        .loading { color: #aaa; padding: 2rem; text-align: center; }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">
+            <a href="index.html"><img src="img/logo.png" alt="Core Acolytes"></a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="catalog.html">Готовые сборки</a></li>
+                <li><a href="configurator.html">Конструктор</a></li>
+                <li><a href="cart.html">Корзина</a></li>
+                <li><a href="contact.html">О нас</a></li>
+                <li class="auth-nav-item"><a href="auth.html">Войти</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="admin-main">
+        <h1 class="admin-title">⚙️ Панель администратора</h1>
+
+        <div class="admin-tabs">
+            <button class="admin-tab active" data-tab="products">Товары</button>
+            <button class="admin-tab" data-tab="orders">Заказы</button>
+            <button class="admin-tab" data-tab="users">Пользователи</button>
+        </div>
+
+        <!-- Товары -->
+        <div class="admin-section active" id="tab-products">
+            <div class="product-form">
+                <h3>➕ Добавить товар</h3>
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label>Название *</label>
+                        <input type="text" id="p-name" placeholder="Например: RTX 5090">
+                    </div>
+                    <div class="form-field">
+                        <label>Категория *</label>
+                        <select id="p-category">
+                            <option value="cpu">Процессор</option>
+                            <option value="gpu">Видеокарта</option>
+                            <option value="ram">Оперативная память</option>
+                            <option value="mb">Материнская плата</option>
+                            <option value="disk">Накопитель</option>
+                            <option value="cooler">Охлаждение</option>
+                            <option value="power">Блок питания</option>
+                            <option value="frame">Корпус</option>
+                        </select>
+                    </div>
+                    <div class="form-field">
+                        <label>Цена (₽) *</label>
+                        <input type="number" id="p-price" placeholder="50000">
+                    </div>
+                    <div class="form-field">
+                        <label>Бренд</label>
+                        <input type="text" id="p-brand" placeholder="nvidia / amd / intel">
+                    </div>
+                    <div class="form-field">
+                        <label>Сокет (для CPU/MB)</label>
+                        <input type="text" id="p-socket" placeholder="LGA1700 / AM5">
+                    </div>
+                    <div class="form-field">
+                        <label>Тип памяти (для MB/RAM)</label>
+                        <input type="text" id="p-ram-type" placeholder="DDR4 / DDR5">
+                    </div>
+                    <div class="form-field">
+                        <label>TDP Вт (для CPU)</label>
+                        <input type="number" id="p-tdp" placeholder="125">
+                    </div>
+                    <div class="form-field">
+                        <label>Макс TDP Вт (для кулера)</label>
+                        <input type="number" id="p-max-tdp" placeholder="250">
+                    </div>
+                    <div class="form-field">
+                        <label>Потребление Вт (для GPU)</label>
+                        <input type="number" id="p-power-req" placeholder="320">
+                    </div>
+                    <div class="form-field">
+                        <label>Мощность Вт (для БП)</label>
+                        <input type="number" id="p-watts" placeholder="850">
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="addProduct()">Добавить товар</button>
+            </div>
+
+            <div class="section-header">
+                <h2>Все товары</h2>
+            </div>
+            <div id="products-list"><p class="loading">Загрузка...</p></div>
+        </div>
+
+        <!-- Заказы -->
+        <div class="admin-section" id="tab-orders">
+            <div class="section-header">
+                <h2>Все заказы</h2>
+                <button class="btn btn-primary" onclick="loadOrders()">🔄 Обновить</button>
+            </div>
+            <div id="orders-list"><p class="loading">Загрузка...</p></div>
+        </div>
+
+        <!-- Пользователи -->
+        <div class="admin-section" id="tab-users">
+            <div class="section-header">
+                <h2>Все пользователи</h2>
+            </div>
+            <div id="users-list"><p class="loading">Загрузка...</p></div>
+        </div>
+    </main>
+
+    <script src="main.js"></script>
+    <script>
+        const API = 'http://127.0.0.1:5000/api';
+
+        // Проверить что пользователь — админ
+        const user = window.CoreShop.getCurrentUser();
+        if (!user || user.role !== 'admin') {
+            alert('Доступ запрещён');
+            window.location.href = 'index.html';
+        }
+
+        // Переключение вкладок
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+
+                if (tab.dataset.tab === 'orders') loadOrders();
+                if (tab.dataset.tab === 'users') loadUsers();
+                if (tab.dataset.tab === 'products') loadProducts();
+            });
+        });
+
+        // ── Товары ──────────────────────────────
+
+        async function loadProducts() {
+            const res = await fetch(`${API}/products`);
+            const products = await res.json();
+
+            const categories = {
+                cpu: 'Процессор', gpu: 'Видеокарта', ram: 'ОЗУ',
+                mb: 'Материнская плата', disk: 'Накопитель',
+                cooler: 'Охлаждение', power: 'БП', frame: 'Корпус'
+            };
+
+            const html = `
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th><th>Название</th><th>Категория</th>
+                            <th>Цена</th><th>Бренд</th><th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${products.map(p => `
+                            <tr>
+                                <td>${p.id}</td>
+                                <td>${p.name}</td>
+                                <td>${categories[p.category] || p.category}</td>
+                                <td>${p.price.toLocaleString('ru-RU')}₽</td>
+                                <td>${p.brand || '—'}</td>
+                                <td>
+                                    <button class="btn btn-danger" onclick="deleteProduct(${p.id}, '${p.name.replace(/'/g, "\\'")}')">
+                                        Удалить
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('products-list').innerHTML = html;
+        }
+
+        async function addProduct() {
+            const token = localStorage.getItem('token');
+            const body = {
+                name:      document.getElementById('p-name').value.trim(),
+                category:  document.getElementById('p-category').value,
+                price:     parseInt(document.getElementById('p-price').value),
+                brand:     document.getElementById('p-brand').value.trim() || null,
+                socket:    document.getElementById('p-socket').value.trim() || null,
+                ram_type:  document.getElementById('p-ram-type').value.trim() || null,
+                tdp:       parseInt(document.getElementById('p-tdp').value) || null,
+                max_tdp:   parseInt(document.getElementById('p-max-tdp').value) || null,
+                power_req: parseInt(document.getElementById('p-power-req').value) || null,
+                watts:     parseInt(document.getElementById('p-watts').value) || null,
+                img:       `img/${document.getElementById('p-category').value}-icon.png`
+            };
+
+            if (!body.name || !body.price) {
+                window.CoreShop.showNotification('Заполните название и цену', 'error');
+                return;
+            }
+
+            const res = await fetch(`${API}/admin/products`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(body)
+            });
+
+            if (res.ok) {
+                window.CoreShop.showNotification('✅ Товар добавлен');
+                loadProducts();
+                // Очистить форму
+                ['p-name','p-price','p-brand','p-socket','p-ram-type','p-tdp','p-max-tdp','p-power-req','p-watts']
+                    .forEach(id => document.getElementById(id).value = '');
+            } else {
+                window.CoreShop.showNotification('Ошибка добавления', 'error');
+            }
+        }
+
+        async function deleteProduct(id, name) {
+            if (!confirm(`Удалить "${name}"?`)) return;
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API}/admin/products/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                window.CoreShop.showNotification('Товар удалён');
+                loadProducts();
+            }
+        }
+
+        // ── Заказы ──────────────────────────────
+
+        async function loadOrders() {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API}/admin/orders`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const orders = await res.json();
+
+            const statusLabels = {
+                new: 'Новый', processing: 'В обработке',
+                done: 'Выполнен', cancelled: 'Отменён'
+            };
+
+            const html = orders.length === 0
+                ? '<p style="color:#aaa">Заказов пока нет</p>'
+                : `<table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th><th>Пользователь</th><th>Состав</th>
+                            <th>Сумма</th><th>Дата</th><th>Статус</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${orders.map(o => `
+                            <tr>
+                                <td>#${o.id}</td>
+                                <td>${o.username}</td>
+                                <td class="order-items-list">
+                                    ${o.items.map(i => `${i.name} ×${i.quantity}`).join('<br>')}
+                                </td>
+                                <td>${o.total.toLocaleString('ru-RU')}₽</td>
+                                <td>${new Date(o.created_at).toLocaleDateString('ru-RU')}</td>
+                                <td>
+                                    <select class="status-select" onchange="updateOrderStatus(${o.id}, this.value)">
+                                        ${['new','processing','done','cancelled'].map(s =>
+                                            `<option value="${s}" ${o.status === s ? 'selected' : ''}>${statusLabels[s]}</option>`
+                                        ).join('')}
+                                    </select>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>`;
+
+            document.getElementById('orders-list').innerHTML = html;
+        }
+
+        async function updateOrderStatus(orderId, status) {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API}/admin/orders/${orderId}/status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ status })
+            });
+            if (res.ok) window.CoreShop.showNotification('Статус обновлён');
+        }
+
+        // ── Пользователи ────────────────────────
+
+        async function loadUsers() {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API}/admin/users`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const users = await res.json();
+
+            const html = `
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>ID</th><th>Логин</th><th>Email</th><th>Роль</th><th>Дата регистрации</th></tr>
+                    </thead>
+                    <tbody>
+                        ${users.map(u => `
+                            <tr>
+                                <td>${u.id}</td>
+                                <td>${u.username}</td>
+                                <td>${u.email}</td>
+                                <td><span class="status-badge ${u.role === 'admin' ? 'status-done' : 'status-new'}">${u.role}</span></td>
+                                <td>${new Date(u.created_at).toLocaleDateString('ru-RU')}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('users-list').innerHTML = html;
+        }
+
+        // Загрузить товары при старте
+        loadProducts();
+    </script>
+</body>
+</html>

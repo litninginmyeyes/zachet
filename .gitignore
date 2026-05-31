@@ -1,0 +1,4 @@
+backend/venv/
+backend/shop.db
+backend/__pycache__/
+*.pyc

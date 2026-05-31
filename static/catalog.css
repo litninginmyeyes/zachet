@@ -1,0 +1,225 @@
+
+.catalog-main {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 4rem;
+}
+
+.catalog-container {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 3rem;
+}
+
+.catalog-filters {
+    background: rgba(30, 30, 30, 0.7);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+}
+
+.catalog-filters h2 {
+    color: #00d4ff;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.filter-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.filter-btn {
+    padding: 1rem;
+    background: transparent;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    color: #cccccc;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.filter-btn:hover {
+    border-color: #00d4ff;
+    color: #ffffff;
+    background: rgba(0, 212, 255, 0.1);
+}
+
+.filter-btn.active {
+    border-color: #00d4ff;
+    background: rgba(0, 212, 255, 0.2);
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+}
+
+.catalog-content {
+    padding: 1rem 0;
+}
+
+.catalog-title {
+    font-size: 2.5rem;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.catalog-subtitle {
+    font-size: 1.2rem;
+    color: #cccccc;
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.builds-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.build-card {
+    background: rgba(30, 30, 30, 0.7);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    padding: 2rem;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.build-card:hover {
+    border-color: rgba(0, 212, 255, 0.5);
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.1);
+    transform: translateY(-5px);
+}
+
+.build-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.build-card h3 {
+    color: #00d4ff;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.build-specs {
+    list-style: none;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+}
+
+.build-specs li {
+    color: #bbbbbb;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.95rem;
+}
+
+.build-specs li:last-child {
+    border-bottom: none;
+}
+
+.build-price {
+    font-size: 1.8rem;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: center;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: rgba(0, 212, 255, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.add-to-cart {
+    padding: 1rem;
+    background: transparent;
+    border: 2px solid #00d4ff;
+    border-radius: 8px;
+    color: #00d4ff;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: auto;
+}
+
+.add-to-cart:hover {
+    background: rgba(0, 212, 255, 0.1);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+}
+
+.build-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    background-color: rgba(10, 10, 20, 0.5);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    padding: 10px;
+}
+
+@media (max-width: 1024px) {
+    .catalog-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .catalog-filters {
+        position: static;
+    }
+    
+    .filter-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .filter-btn {
+        flex: 1;
+        min-width: 120px;
+    }
+}
+
+@media (max-width: 768px) {
+    .builds-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .catalog-title {
+        font-size: 2rem;
+    }
+    
+    .catalog-subtitle {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .catalog-main {
+        padding: 1rem;
+    }
+    
+    .filter-buttons {
+        flex-direction: column;
+    }
+    
+    .filter-btn {
+        width: 100%;
+    }
+}
