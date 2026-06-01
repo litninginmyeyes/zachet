@@ -7,18 +7,10 @@ import sqlite3
 import hashlib
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-app = Flask(__name__, static_folder=os.path.join(BASE_DIR, 'static'), static_url_path='')
+app = Flask(__name__, static_folder='static', static_url_path='')
 app.config['JWT_SECRET_KEY'] = 'core-acolytes-secret-key-2024'
 CORS(app)
 jwt = JWTManager(app)
-
-@app.route('/debug')
-def debug():
-    import os
-    static_path = os.path.join(BASE_DIR, 'static')
-    files = os.listdir(static_path) if os.path.exists(static_path) else 'папка не найдена'
-    return {'base_dir': BASE_DIR, 'static_path': static_path, 'files': str(files)}
 
 @app.route('/')
 def index():
