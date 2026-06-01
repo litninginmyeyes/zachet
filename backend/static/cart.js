@@ -1,10 +1,8 @@
-// cart.js — загрузка корзины, изменение количества, удаление, оформление заказа
 
 document.addEventListener('DOMContentLoaded', () => {
     loadCart();
 });
 
-// --- Загрузка корзины с сервера ---
 async function loadCart() {
     if (!window.CoreShop.isLoggedIn()) {
         showEmptyCart();
@@ -21,12 +19,10 @@ async function loadCart() {
     }
 }
 
-// --- Отрисовка товаров корзины ---
 function renderCart(items) {
     const container = document.querySelector('.cart-items');
     if (!container) return;
 
-    // Очистить статичные карточки из HTML
     container.querySelectorAll('.cart-item').forEach(el => el.remove());
     const emptyMsg = container.querySelector('.empty-cart-message');
 
@@ -36,10 +32,8 @@ function renderCart(items) {
         return;
     }
 
-    // Скрыть пустое сообщение
     if (emptyMsg) emptyMsg.style.display = 'none';
 
-    // Вставить товары перед пустым сообщением
     items.forEach(item => {
         const card = createCartItemElement(item);
         container.insertBefore(card, emptyMsg);
@@ -49,13 +43,11 @@ function renderCart(items) {
     initCartEvents();
 }
 
-// --- Создать карточку товара ---
 function createCartItemElement(item) {
     const div = document.createElement('div');
     div.className = 'cart-item';
     div.dataset.itemId = item.id;
 
-    // Картинка по категории
     const imgMap = { standard: 'standart', pro: 'pro', ultimate: 'ultimate', custom: 'configurator' };
     const imgName = imgMap[item.category] || 'standart';
 
@@ -83,9 +75,7 @@ function createCartItemElement(item) {
     return div;
 }
 
-// --- Навешивание событий на кнопки ---
 function initCartEvents() {
-    // Кнопки количества
     document.querySelectorAll('.quantity-btn.minus').forEach(btn => {
         btn.addEventListener('click', () => changeQuantity(btn.dataset.id, -1));
     });
@@ -93,19 +83,16 @@ function initCartEvents() {
         btn.addEventListener('click', () => changeQuantity(btn.dataset.id, 1));
     });
 
-    // Кнопки удаления
     document.querySelectorAll('.remove-btn').forEach(btn => {
         btn.addEventListener('click', () => removeItem(btn.dataset.id));
     });
 
-    // Кнопка оформления заказа
     const checkoutBtn = document.querySelector('.checkout-btn');
     if (checkoutBtn) {
         checkoutBtn.addEventListener('click', checkout);
     }
 }
 
-// --- Изменить количество ---
 async function changeQuantity(itemId, delta) {
     const card = document.querySelector(`.cart-item[data-item-id="${itemId}"]`);
     const quantityEl = card?.querySelector('.quantity');
@@ -124,7 +111,6 @@ async function changeQuantity(itemId, delta) {
         });
         quantityEl.textContent = newQty;
 
-        // Обновить цену в карточке
         const data = await window.CoreShop.apiFetch('/cart');
         const item = data.items.find(i => String(i.id) === String(itemId));
         if (item) {
@@ -138,7 +124,6 @@ async function changeQuantity(itemId, delta) {
     }
 }
 
-// --- Удалить товар ---
 async function removeItem(itemId) {
     try {
         await window.CoreShop.apiFetch(`/cart/remove/${itemId}`, { method: 'DELETE' });
@@ -165,7 +150,6 @@ async function removeItem(itemId) {
     }
 }
 
-// --- Обновить итоговую сумму ---
 function updateSummary(items) {
     const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const count = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -176,12 +160,10 @@ function updateSummary(items) {
     const totalEl = document.querySelector('.total-price');
     if (totalEl) totalEl.textContent = formatPrice(total) + '₽';
 
-    // Также обновить строку с суммой без скидки
     const rows = document.querySelectorAll('.summary-row');
     if (rows[0]) rows[0].querySelector('span:last-child').textContent = formatPrice(total) + '₽';
 }
 
-// --- Показать пустую корзину ---
 function showEmptyCart() {
     const emptyMsg = document.querySelector('.empty-cart-message');
     if (emptyMsg) emptyMsg.style.display = 'block';
@@ -193,13 +175,11 @@ function showEmptyCart() {
     if (checkoutBtn) checkoutBtn.disabled = true;
 }
 
-// --- Проверить, стала ли корзина пустой ---
 function checkIfEmpty() {
     const items = document.querySelectorAll('.cart-item');
     if (items.length === 0) showEmptyCart();
 }
 
-// --- Оформить заказ ---
 async function checkout() {
     const items = document.querySelectorAll('.cart-item');
     if (items.length === 0) {
@@ -215,7 +195,6 @@ async function checkout() {
         await window.CoreShop.apiFetch('/orders/create', { method: 'POST' });
         window.CoreShop.showNotification('✅ Заказ успешно оформлен!');
 
-        // Очистить корзину на странице
         document.querySelectorAll('.cart-item').forEach(el => el.remove());
         showEmptyCart();
         window.CoreShop.updateCartCounter();
@@ -228,7 +207,6 @@ async function checkout() {
     }
 }
 
-// --- Утилита форматирования цены ---
 function formatPrice(num) {
     return num.toLocaleString('ru-RU');
 }

@@ -1,4 +1,3 @@
-// configurator.js — комплектующие загружаются из БД через Flask API
 
 const CATEGORY_NAMES = {
     cpu: 'Процессор', gpu: 'Видеокарта', ram: 'Оперативная память',
@@ -43,7 +42,7 @@ async function loadComponents(category) {
     if (grid) grid.innerHTML = '<p style="color:#aaa;padding:1rem">Загрузка...</p>';
 
     try {
-        const res = await fetch(`http://127.0.0.1:5000/api/products?category=${category}`);
+        const res = await fetch(`${window.API_BASE || 'https://zachet-production.up.railway.app'}/api/products?category=${category}`);
         allProducts = await res.json();
 
         buildBrandFilter(allProducts);

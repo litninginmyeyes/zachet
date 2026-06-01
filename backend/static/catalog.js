@@ -1,18 +1,15 @@
-// catalog.js — фильтрация каталога и добавление в корзину
 
 document.addEventListener('DOMContentLoaded', () => {
     initFilters();
     initAddToCart();
 });
 
-// --- Фильтрация по категориям ---
 function initFilters() {
     const filterBtns = document.querySelectorAll('.filter-btn');
     const buildCards = document.querySelectorAll('.build-card');
 
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Убрать активный класс у всех
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
@@ -29,13 +26,11 @@ function initFilters() {
         });
     });
 
-    // Добавить анимацию
     const style = document.createElement('style');
     style.textContent = `@keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }`;
     document.head.appendChild(style);
 }
 
-// --- Добавление в корзину ---
 function initAddToCart() {
     const addBtns = document.querySelectorAll('.add-to-cart');
 
@@ -53,7 +48,6 @@ function initAddToCart() {
             const price = parseInt(priceText.replace(/\D/g, ''));
             const category = card.dataset.category;
 
-            // Собрать характеристики
             const specs = [...card.querySelectorAll('.build-specs li')].map(li => li.textContent).join(' • ');
 
             btn.textContent = '⏳ Добавляем...';

@@ -1,8 +1,6 @@
-// main.js — общие утилиты, счётчик корзины в шапке
 
-const API_BASE = 'http://127.0.0.1:5000/api';
+const API_BASE = 'https://zachet-production.up.railway.app/api';
 
-// --- Утилиты для работы с API ---
 async function apiFetch(endpoint, options = {}) {
     const token = localStorage.getItem('token');
     const headers = { 'Content-Type': 'application/json' };
@@ -19,7 +17,6 @@ async function apiFetch(endpoint, options = {}) {
     }
 }
 
-// --- Счётчик корзины в шапке ---
 async function updateCartCounter() {
     const token = localStorage.getItem('token');
     if (!token) { setCartBadge(0); return; }
@@ -58,7 +55,6 @@ function setCartBadge(count) {
     }
 }
 
-// --- Показать уведомление ---
 function showNotification(message, type = 'success') {
     const existing = document.querySelector('.notification');
     if (existing) existing.remove();
@@ -83,14 +79,12 @@ function showNotification(message, type = 'success') {
     setTimeout(() => note.remove(), 3000);
 }
 
-// --- Проверка авторизации ---
 function isLoggedIn() { return !!localStorage.getItem('token'); }
 function getCurrentUser() {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : null;
 }
 
-// --- Обновить пункт входа/профиля в шапке ---
 function updateHeaderAuth() {
     const authLink = document.querySelector('.auth-nav-item a');
     if (!authLink) return;
@@ -101,7 +95,6 @@ function updateHeaderAuth() {
         authLink.href = '#';
         authLink.style.position = 'relative';
 
-        // Добавить стили выпадающего меню
         if (!document.querySelector('#dropdown-style')) {
             const style = document.createElement('style');
             style.id = 'dropdown-style';
@@ -138,7 +131,6 @@ function updateHeaderAuth() {
             document.head.appendChild(style);
         }
 
-        // Создать выпадающее меню
         const dropdown = document.createElement('div');
         dropdown.className = 'profile-dropdown';
         dropdown.innerHTML = `
@@ -150,18 +142,15 @@ function updateHeaderAuth() {
         li.style.position = 'relative';
         li.appendChild(dropdown);
 
-        // Открыть/закрыть по клику
         authLink.addEventListener('click', (e) => {
             e.preventDefault();
             dropdown.classList.toggle('open');
         });
 
-        // Закрыть при клике вне меню
         document.addEventListener('click', (e) => {
             if (!li.contains(e.target)) dropdown.classList.remove('open');
         });
 
-        // Выход
         dropdown.querySelector('#logout-btn').addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.removeItem('token');
@@ -176,7 +165,6 @@ function updateHeaderAuth() {
     }
 }
 
-// --- Инициализация ---
 document.addEventListener('DOMContentLoaded', () => {
     updateCartCounter();
     updateHeaderAuth();
