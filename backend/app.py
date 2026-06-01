@@ -13,6 +13,13 @@ app.config['JWT_SECRET_KEY'] = 'core-acolytes-secret-key-2024'
 CORS(app)
 jwt = JWTManager(app)
 
+@app.route('/debug')
+def debug():
+    import os
+    static_path = os.path.join(BASE_DIR, 'static')
+    files = os.listdir(static_path) if os.path.exists(static_path) else 'папка не найдена'
+    return {'base_dir': BASE_DIR, 'static_path': static_path, 'files': str(files)}
+
 @app.route('/')
 def index():
     return app.send_static_file('index.html')
