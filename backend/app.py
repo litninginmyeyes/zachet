@@ -7,10 +7,14 @@ import sqlite3
 import hashlib
 import os
  
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../static', static_url_path='')
 app.config['JWT_SECRET_KEY'] = 'core-acolytes-secret-key-2024'
 CORS(app)
 jwt = JWTManager(app)
+
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
  
 DB_PATH = os.path.join(os.path.dirname(__file__), 'shop.db')
  
