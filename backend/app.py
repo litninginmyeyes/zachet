@@ -6,8 +6,9 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 import sqlite3
 import hashlib
 import os
- 
-app = Flask(__name__, static_folder='../static', static_url_path='')
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+app = Flask(__name__, static_folder=os.path.join(BASE_DIR, 'static'), static_url_path='')
 app.config['JWT_SECRET_KEY'] = 'core-acolytes-secret-key-2024'
 CORS(app)
 jwt = JWTManager(app)
